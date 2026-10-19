@@ -14,4 +14,6 @@
 
 该发行版未做商业代码签名，可能显示未知发布者或 SmartScreen 提示。请核对来源与 SHA-256，应用不会绕过系统安全策略。
 
-当前仓库为私有，下载附件需要具备仓库权限的 GitHub 账号；英格雷斯应用本身不采用登录制。
+仓库现已公开，可直接下载附件；英格雷斯应用本身不采用登录制。
+
+[Code signing policy](https://github.com/Rose-ZG/englace/blob/main/docs/CODE-SIGNING.md)：免费签名申请准备中，现有附件仍未签名。

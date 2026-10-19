@@ -23,13 +23,16 @@
 
 ## 项目概览
 
+项目代码采用 [MIT 许可证](LICENSE)，第三方内容保留各自许可，详见 [内容来源](docs/SOURCES.md)。
+[Code signing policy](docs/CODE-SIGNING.md)：正在准备免费签名申请，现有 v0.7.0 下载仍未签名。
+
 ### v0.7 · Windows 桌面应用，下载即用
 
 [**下载便携版（双击启动）**](https://github.com/Rose-ZG/englace/releases/download/v0.7.0/Englace-0.7.0-x64-portable.exe) · [**下载一键安装版**](https://github.com/Rose-ZG/englace/releases/download/v0.7.0/Englace-0.7.0-x64-setup.exe) · [校验文件](https://github.com/Rose-ZG/englace/releases/download/v0.7.0/SHA256SUMS.txt)
 
 适用于 Windows 10/11 64 位，内置 Electron 运行环境、全部词库与本地听力，无需安装 Node.js。安装版创建桌面与开始菜单快捷方式，安装完成自动启动；便携版免安装，首次启动需要解包。新增托盘菜单、窗口恢复与下载新版本入口，沿用网页 Logo 作为应用图标。
 
-软件无需登录；私有 GitHub 仓库的发行附件需要仓库权限。安装版与便携版共享 `%APPDATA%\Englace` 档案，更新与卸载默认保留数据。当前未做商业代码签名，可能出现系统发布者提示。详见 [桌面使用与构建说明](docs/DESKTOP.md)。
+软件无需登录；公开 GitHub 仓库的发行附件可直接下载。安装版与便携版共享 `%APPDATA%\Englace` 档案，更新与卸载默认保留数据。当前未做商业代码签名，可能出现系统发布者提示。详见 [桌面使用与构建说明](docs/DESKTOP.md)。
 
 开发者可运行 `npm run desktop:dist` 构建，`npm run desktop:audit` 检查包内容。GitHub Actions 在版本标签推送后生成 Windows 附件；手动运行并选择发布时才写入 Release，避免自动覆盖已有经过验证的附件。
 
@@ -96,7 +99,7 @@
 
 - **Node.js 20 或更高版本**，包含 npm。
 - 支持 `localStorage`、`IndexedDB` 和现代音视频播放的浏览器。
-- 使用有权访问本私有仓库的 GitHub 账号克隆。
+- 直接克隆本公开仓库，无需仓库访问授权。
 
 ### 克隆与运行
 

@@ -10,7 +10,7 @@
 从高考到大学、从考试到真实语境，把词汇积累、间隔复习和听力训练连成日常。
 
 [![Validate Englace](https://github.com/Rose-ZG/englace/actions/workflows/check.yml/badge.svg)](https://github.com/Rose-ZG/englace/actions/workflows/check.yml)
-![Version](https://img.shields.io/badge/version-0.6.0-222728?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.7.0-222728?style=flat-square)
 ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A5%2020-709950?style=flat-square&logo=nodedotjs&logoColor=white)
 ![Local First](https://img.shields.io/badge/storage-local%20first-c8f37b?style=flat-square&labelColor=222728)
 ![Runtime Dependencies](https://img.shields.io/badge/runtime%20dependencies-0-222728?style=flat-square)
@@ -22,6 +22,16 @@
 ---
 
 ## 项目概览
+
+### v0.7 · Windows 桌面应用，下载即用
+
+[**下载便携版（双击启动）**](https://github.com/Rose-ZG/englace/releases/download/v0.7.0/Englace-0.7.0-x64-portable.exe) · [**下载一键安装版**](https://github.com/Rose-ZG/englace/releases/download/v0.7.0/Englace-0.7.0-x64-setup.exe) · [校验文件](https://github.com/Rose-ZG/englace/releases/download/v0.7.0/SHA256SUMS.txt)
+
+适用于 Windows 10/11 64 位，内置 Electron 运行环境、全部词库与本地听力，无需安装 Node.js。安装版创建桌面与开始菜单快捷方式，安装完成自动启动；便携版免安装，首次启动需要解包。新增托盘菜单、窗口恢复与下载新版本入口，沿用网页 Logo 作为应用图标。
+
+软件无需登录；私有 GitHub 仓库的发行附件需要仓库权限。安装版与便携版共享 `%APPDATA%\Englace` 档案，更新与卸载默认保留数据。当前未做商业代码签名，可能出现系统发布者提示。详见 [桌面使用与构建说明](docs/DESKTOP.md)。
+
+开发者可运行 `npm run desktop:dist` 构建，`npm run desktop:audit` 检查包内容。GitHub Actions 在版本标签推送后生成 Windows 附件；手动运行并选择发布时才写入 Release，避免自动覆盖已有经过验证的附件。
 
 ### v0.6 · 以自己的方式，进入英语世界
 
@@ -65,7 +75,7 @@
 | :---: | :---: | :---: | :---: |
 | 各区进度独立 | 词包按需加载 | 本地合成音频 | 作答后即时解析 |
 
-> 当前版本为 **v0.6.0 MVP**，适合体验与迭代验证。内置训练不等同于完整官方题库、正式模考或专业测评。
+> 当前版本为 **v0.7.0 MVP**，适合体验与迭代验证。内置训练不等同于完整官方题库、正式模考或专业测评。
 
 ### v0.3 · 从记忆，走向表达
 

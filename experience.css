@@ -21,3 +21,4 @@ body.motion-off *,body.motion-off *:before,body.motion-off *:after{animation:non
 .motion-off .arrival-light{opacity:.23!important}@media(prefers-reduced-motion:reduce){.arrival-light{opacity:.23!important}}
 .pet-wardrobe{grid-column:1/-1}
 .snap-rail{background-image:linear-gradient(90deg,var(--glow-a),var(--glow-b));background-size:calc(var(--rail-progress,0)*100%) 2px;background-repeat:no-repeat;background-position:left bottom}.vocab-card.scroll-reveal.in-view:hover,.track.scroll-reveal.in-view:hover{transform:translateY(-4px)}
+.desktop-download-entry{font-size:11px;border:1px solid var(--line);border-radius:12px;padding:11px 14px;pointer-events:auto;background:var(--glass-bg)}

@@ -1,0 +1,50 @@
+name: Build Windows Desktop
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish verified assets to the matching version release'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check
+      - run: npm test
+      - run: npm run desktop:dist
+      - run: node scripts/audit-desktop.cjs
+      - name: Test bundled application
+        shell: pwsh
+        run: |
+          $result = Join-Path $PWD '.cache/packaged-smoke.json'
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          $portable = Join-Path $PWD "release/Englace-$version-x64-portable.exe"
+          $app = Start-Process -FilePath $portable -ArgumentList '--smoke-test', "--smoke-output=$result" -WindowStyle Hidden -PassThru -Wait
+          if ($app.ExitCode -ne 0 -or !(Test-Path $result)) { throw 'Packaged smoke test failed' }
+          $data = Get-Content $result | ConvertFrom-Json
+          if (!$data.packaged -or !$data.homeReady -or !$data.petLoaded -or $data.rendererErrors -ne 0) { throw 'Packaged UI did not initialise' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Englace-Windows-x64
+          path: |
+            release/Englace-*.exe
+            release/SHA256SUMS.txt
+          if-no-files-found: error
+      - name: Publish release when explicitly requested
+        if: github.event_name == 'workflow_dispatch' && inputs.publish
+        run: node scripts/publish-desktop.cjs
+        env:
+          GH_TOKEN: ${{ github.token }}

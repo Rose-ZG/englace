@@ -1,5 +1,6 @@
 'use strict';
 const {app,BrowserWindow,ipcMain,screen,session,dialog,shell,Menu,Tray,nativeImage}=require('electron');
+const windows=require('./window-state.cjs');
 const http=require('node:http'),path=require('node:path'),fs=require('node:fs');
 const ROOT=path.resolve(__dirname,'..'),smoke=process.argv.includes('--smoke-test');
 let BASE='',mainWindow,petWindow,server,tray,quitting=false;
@@ -9,10 +10,10 @@ app.setName('Englace');app.setAppUserModelId('com.rosezg.englace');
 const profile=smoke?path.join(app.getPath('temp'),'englace-smoke-'+process.pid):path.join(app.getPath('appData'),'Englace');
 fs.mkdirSync(profile,{recursive:true});app.setPath('userData',profile);
 function ownURL(url){try{return new URL(url).origin===BASE;}catch{return false;}}
-function showMain(){if(!mainWindow||mainWindow.isDestroyed())return;if(mainWindow.isMinimized())mainWindow.restore();mainWindow.show();mainWindow.focus();}
-function togglePet(){if(petWindow.isVisible())petWindow.hide();else petWindow.showInactive();}
+function showMain(){if(!quitting)windows.show(mainWindow);}
+function togglePet(){return !quitting&&windows.toggle(petWindow);}
 function exit(){quitting=true;app.quit();}
-function trusted(event){return [mainWindow?.webContents,petWindow?.webContents].includes(event.sender)&&event.senderFrame===event.sender.mainFrame&&ownURL(event.senderFrame.url);}
+function trusted(event){return [windows.contents(mainWindow),windows.contents(petWindow)].includes(event.sender)&&event.senderFrame===event.sender.mainFrame&&ownURL(event.senderFrame.url);}
 function protect(win){
  win.webContents.on('will-navigate',(event,url)=>{if(!ownURL(url))event.preventDefault();});
  win.webContents.setWindowOpenHandler(({url})=>{try{const u=new URL(url),allowed=['github.com','www.gutenberg.org','www.oxfordlearnersdictionaries.com','www.ldoceonline.com','www.pep.com.cn','durian.blender.org','www.bilibili.com','ielts.org','www.ets.org','cet.neea.edu.cn'];if(u.protocol==='https:'&&allowed.includes(u.hostname))shell.openExternal(u.href);}catch{}return{action:'deny'};});
@@ -28,7 +29,7 @@ if(!app.requestSingleInstanceLock()){app.quit();}else{
   catch{if(smoke)throw Error('Local server could not start.');dialog.showErrorBox('英格雷斯','本机端口 4174 已被占用。请退出旧版英格雷斯后重新打开，学习数据会保留。');exit();return;}
   BASE='http://127.0.0.1:'+server.address().port;
   session.defaultSession.setPermissionRequestHandler(async(contents,permission,callback,details)=>{
-   const own=contents===mainWindow?.webContents&&ownURL(details.requestingUrl);
+   const own=contents===windows.contents(mainWindow)&&ownURL(details.requestingUrl);
    const audioOnly=Array.isArray(details.mediaTypes)&&details.mediaTypes.length>0&&details.mediaTypes.every(t=>t==='audio');
    if(!own||permission!=='media'||!audioOnly){callback(false);return;}
    const answer=await dialog.showMessageBox(mainWindow,{type:'question',buttons:['不允许','允许本次录音'],defaultId:0,cancelId:0,title:'英格雷斯 · 麦克风',message:'是否允许本次口语练习使用麦克风？',detail:'录音留在当前页面，不自动上传。'});callback(answer.response===1);
@@ -41,8 +42,8 @@ if(!app.requestSingleInstanceLock()){app.quit();}else{
   protect(mainWindow);protect(petWindow);
   ipcMain.on('englace:ready',event=>{if(trusted(event))readyFrames.add(event.sender.id);});
   ipcMain.on('englace:smoke-ready',(event,result)=>{if(smoke&&trusted(event))smokeFrames.set(event.sender.id,result);});
-  ipcMain.handle('englace:toggle-pet',event=>{if(!trusted(event))return false;togglePet();return true;});
-  ipcMain.handle('englace:set-pet',(event,visible)=>{if(!trusted(event)||typeof visible!=='boolean')return false;if(!smoke){if(visible)petWindow.showInactive();else petWindow.hide();}return true;});
+  ipcMain.handle('englace:toggle-pet',event=>{if(!trusted(event))return false;return togglePet();});
+  ipcMain.handle('englace:set-pet',(event,visible)=>{if(!trusted(event)||typeof visible!=='boolean')return false;if(!smoke){return windows.setVisible(petWindow,visible);}return true;});
   ipcMain.handle('englace:show-main',event=>{if(trusted(event))showMain();});
   ipcMain.handle('englace:quit',event=>{if(trusted(event))exit();});
   if(!smoke){
@@ -51,7 +52,9 @@ if(!app.requestSingleInstanceLock()){app.quit();}else{
    Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
    tray=new Tray(nativeImage.createFromPath(icon).resize({width:24,height:24}));tray.setToolTip('英格雷斯 · 继续你的英语之旅');tray.setContextMenu(Menu.buildFromTemplate([{label:'打开学习窗口',click:showMain},{label:'显示 / 收起桌宠',click:togglePet},{type:'separator'},{label:'退出英格雷斯',click:exit}]));tray.on('double-click',showMain);
   }
-  mainWindow.on('close',event=>{if(!quitting&&!smoke){if(petWindow?.isVisible()){event.preventDefault();mainWindow.hide();}else exit();}});
+  mainWindow.on('close',event=>{if(!quitting&&!smoke){if(windows.visible(petWindow)){event.preventDefault();mainWindow.hide();}else exit();}});
+  mainWindow.on('closed',()=>{mainWindow=null;});
+  petWindow.on('closed',()=>{petWindow=null;});
   await Promise.all([mainWindow.loadURL(BASE+'/'),petWindow.loadURL(BASE+'/desktop-pet.html')]);
   if(smoke){
    const until=Date.now()+12000;while(smokeFrames.size<2&&Date.now()<until)await new Promise(r=>setTimeout(r,50));
@@ -59,9 +62,11 @@ if(!app.requestSingleInstanceLock()){app.quit();}else{
    if(!main?.homeReady||!main.directionReady||!pet?.petReady||rendererErrors.length||readyFrames.size!==2)throw Error('A renderer or preload did not initialise.');
    for(const file of ['experience.js','arcade-audio.js','data/cet4.json','assets/app-icon.png']){const response=await fetch(BASE+'/'+file);if(!response.ok)throw Error('Bundled asset missing.');await response.arrayBuffer();}
    const api=await fetch(BASE+'/api/session');if(!api.ok)throw Error('Local API failed.');
-   const result={packaged:app.isPackaged,version:app.getVersion(),mainLoaded:true,petLoaded:true,homeReady:main.homeReady,directionReady:main.directionReady,mainBridgeReady:true,petBridgeReady:true,apiReady:true,rendererErrors:rendererErrors.length,alwaysOnTop:petWindow.isAlwaysOnTop(),nodeIntegration:false,contextIsolation:true,sandbox:true};
+   const probe=new BrowserWindow({show:false,webPreferences:prefs});probe.destroy();
+   if(windows.show(probe)!==false||windows.toggle(probe)!==false||windows.contents(probe)!==null)throw Error('Destroyed window regression failed.');
+   const result={destroyedWindowSafe:true,packaged:app.isPackaged,version:app.getVersion(),mainLoaded:true,petLoaded:true,homeReady:main.homeReady,directionReady:main.directionReady,mainBridgeReady:true,petBridgeReady:true,apiReady:true,rendererErrors:rendererErrors.length,alwaysOnTop:petWindow.isAlwaysOnTop(),nodeIntegration:false,contextIsolation:true,sandbox:true};
    const out=smokeOutput?path.resolve(smokeOutput):path.join(profile,'result.json');fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify(result,null,2));console.log('Desktop smoke passed: bundled UI, pet, assets, API and sandbox loaded.');exit();
   }else showMain();
  }).catch(()=>{console.error('Desktop startup failed.');process.exitCode=1;exit();});
 }
-app.on('before-quit',()=>{quitting=true;});app.on('will-quit',()=>{if(server?.listening)server.close();tray?.destroy();});app.on('window-all-closed',()=>app.quit());
+app.on('before-quit',()=>{quitting=true;});app.on('will-quit',()=>{if(server?.listening)server.close();if(tray&&!tray.isDestroyed())tray.destroy();});app.on('window-all-closed',()=>app.quit());

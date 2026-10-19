@@ -6,8 +6,8 @@
 
 从 [最新发行版](https://github.com/Rose-ZG/englace/releases/latest) 选择：
 
-- `Englace-0.7.0-x64-portable.exe`：免安装，下载后双击启动。首次解包可能稍慢，不需要 Node.js 或终端。
-- `Englace-0.7.0-x64-setup.exe`：当前用户一键安装，创建桌面和开始菜单快捷方式，安装完成自动启动。
+- `Englace-0.7.1-x64-portable.exe`：免安装，下载后双击启动。首次解包可能稍慢，不需要 Node.js 或终端。
+- `Englace-0.7.1-x64-setup.exe`：当前用户一键安装，创建桌面和开始菜单快捷方式，安装完成自动启动。
 - `SHA256SUMS.txt`：两份可执行文件的 SHA-256 校验值。
 
 适用于 Windows 10/11 64 位。软件及词库内置在下载文件中；学习记录只保存在当前电脑，无需登录英格雷斯。GitHub 仓库现已公开，发行附件可直接下载。

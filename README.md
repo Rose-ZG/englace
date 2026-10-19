@@ -10,7 +10,7 @@
 从高考到大学、从考试到真实语境，把词汇积累、间隔复习和听力训练连成日常。
 
 [![Validate Englace](https://github.com/Rose-ZG/englace/actions/workflows/check.yml/badge.svg)](https://github.com/Rose-ZG/englace/actions/workflows/check.yml)
-![Version](https://img.shields.io/badge/version-0.5.0-222728?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.6.0-222728?style=flat-square)
 ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A5%2020-709950?style=flat-square&logo=nodedotjs&logoColor=white)
 ![Local First](https://img.shields.io/badge/storage-local%20first-c8f37b?style=flat-square&labelColor=222728)
 ![Runtime Dependencies](https://img.shields.io/badge/runtime%20dependencies-0-222728?style=flat-square)
@@ -22,6 +22,16 @@
 ---
 
 ## 项目概览
+
+### v0.6 · 以自己的方式，进入英语世界
+
+- **应用首页与称呼**：迎宾首页加入立体球体、浮动词卡和滚动过渡，下方保留原学习总览。可输入希望系统使用的称呼，在页眉、游戏提示和历史成绩中体现。
+- **流畅滚动**：卡片进入视野时渐显，首页图形随滚动联动，学习方向卡片可横向滚动与吸附。系统或外观菜单中关闭动画后，内容立即可读，不强制劫持鼠标滚轮。
+- **外观下拉窗口**：七套主题 × 三种卡片材质，支持渐变毛玻璃、柔光缎面与素纸；学习方向由独立轨道选择面板承载。
+- **更明快的游乐场**：提高游戏速度与障碍频率，增加十八秒生存关卡、关卡进度、个人纪录庆祝及按考试方向/游戏隔离的历史前十榜。四款游戏分别使用原创 BGM 配器与节奏，操作音效与音乐可明确区分。
+- **伙伴饰品衣橱**：十二种本地造型、十类饰品，最多搭配四件；支持自定义饰品色与上传图叠加。饰品随工作室备份恢复，桌宠复用同一安全 SVG 渲染器。
+
+称呼、主题、卡片材质与排行榜独立保存在当前浏览器，不自动发送给 AI，不上传仓库；这些界面设置及成绩历史暂不包含在学习/工作室备份中。排行榜从本版本起记录，旧版最佳分数继续保留。打开中的旧桌面实例需要重启后加载新脚本。
 
 ### v0.5 · 词汇宇宙与记忆游乐场
 
@@ -55,7 +65,7 @@
 | :---: | :---: | :---: | :---: |
 | 各区进度独立 | 词包按需加载 | 本地合成音频 | 作答后即时解析 |
 
-> 当前版本为 **v0.5.0 MVP**，适合体验与迭代验证。内置训练不等同于完整官方题库、正式模考或专业测评。
+> 当前版本为 **v0.6.0 MVP**，适合体验与迭代验证。内置训练不等同于完整官方题库、正式模考或专业测评。
 
 ### v0.3 · 从记忆，走向表达
 

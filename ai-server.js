@@ -56,7 +56,7 @@ function makeApi({fetcher=fetch,env=process.env}={}){
       if(body.consent!==true)throw Error('发送前需要确认将内容交给所选服务商处理');
       if(typeof body.text!=='string'||!body.text.trim()||body.text.length>20000)throw Error('请提供 1–20,000 字符内容');
       if(body.image&&(!validImage(body.image)||!PROVIDERS[config.provider].vision))throw Error('图片格式不支持或所选服务商未启用图片输入');
-      const modes={chat:'回答英语学习问题，必要时给出中英文解释与可执行练习。',writing:'按题目要求点评作文，依次给出任务完成度、结构、用词、语法和三条可操作修改建议。引用原文并给出改写。禁止假冒官方评分。',speaking:'依据用户提供的口语转写提供内容、语法和表达建议。没有音频，不能评价发音、音准或流利度，更不能给出官方分数。',design:'为英语学习伙伴设计外观配置。只输出一个 JSON 对象，包含 style（orb,cat,fox,robot,owl,slime 中之一）、color（#RRGGBB）、name（20字内）、description（100字内）。如有参考图只提取外观，不推断人物敏感属性。不要输出SVG或可执行代码。'};
+      const modes={chat:'回答英语学习问题，必要时给出中英文解释与可执行练习。',writing:'按题目要求点评作文，依次给出任务完成度、结构、用词、语法和三条可操作修改建议。引用原文并给出改写。禁止假冒官方评分。',speaking:'依据用户提供的口语转写提供内容、语法和表达建议。没有音频，不能评价发音、音准或流利度，更不能给出官方分数。',design:'为英语学习伙伴设计外观配置。只输出一个 JSON 对象，包含 style（orb,cat,fox,robot,owl,slime,bunny,panda,dragon,penguin,jellyfish,star 中之一）、color（#RRGGBB）、name（20字内）、description（100字内）。如有参考图只提取外观，不推断人物敏感属性。不要输出SVG或可执行代码。'};
       if(!Object.hasOwn(modes,body.mode))throw Error('未知辅学任务');
       const now=Date.now();lastCalls=lastCalls.filter(t=>now-t<60000);if(active>=2||lastCalls.length>=12){json(res,429,{error:'请求较频繁，请稍候再试'});return;}
       const provider=PROVIDERS[config.provider],key=config.key,model=config.model;

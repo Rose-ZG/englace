@@ -1,0 +1,9 @@
+const fs=require('node:fs');fs.mkdirSync('assets',{recursive:true});
+const themes={dawn:['#293d4a','#f5b883','#eed9a4'],forest:['#182e2d','#63856f','#bad4a0'],ocean:['#22364d','#83bac4','#e0dfc4'],night:['#171d3a','#787baf','#e2dabc'],garden:['#423a47','#d6a6a9','#eee2c2'],library:['#342f2b','#ad8b64','#e9d3ae']};
+for(const [name,[dark,light,accent]] of Object.entries(themes)){
+const stars=Array.from({length:20},(_,i)=>`<circle cx="${20+i*53%880}" cy="${25+i*37%240}" r="${1+i%2}" fill="${accent}" opacity=".6"/>`).join('');
+const trees=Array.from({length:9},(_,i)=>`<path d="M${i*110-20} 480l60-230 60 230z" fill="${dark}" opacity="${.5+i%3*.15}"/>`).join('');
+const shelves=Array.from({length:16},(_,i)=>`<rect x="${70+i*47}" y="${205+i%3*18}" width="${20+i%3*8}" height="${170-i%3*18}" rx="3" fill="${i%2?light:accent}" opacity=".7"/>`).join('');
+const feature=name==='library'?`<path d="M40 390h820M40 400h820" stroke="${accent}" stroke-width="12"/>${shelves}`:name==='forest'?trees:name==='garden'?`<g fill="${accent}">${Array.from({length:12},(_,i)=>`<circle cx="${70+i*73}" cy="${310+i%3*30}" r="27" opacity=".4"/>`).join('')}</g>`:`<path d="M0 360Q200 250 430 370T900 320V500H0Z" fill="${dark}" opacity=".5"/><path d="M0 410Q180 330 470 415T900 380" fill="none" stroke="${accent}" stroke-width="2" opacity=".4"/>`;
+fs.writeFileSync(`assets/${name}.svg`,`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500"><defs><linearGradient id="g" x2=".8" y2="1"><stop stop-color="${dark}"/><stop offset="1" stop-color="${light}"/></linearGradient></defs><rect width="900" height="500" fill="url(#g)"/>${stars}<circle cx="690" cy="130" r="58" fill="${accent}" opacity=".8"/>${feature}<path d="M0 465Q280 360 570 460T900 440V500H0Z" fill="${dark}" opacity=".75"/></svg>`);
+}console.log('Six original editorial illustrations generated.');

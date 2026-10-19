@@ -10,3 +10,10 @@ preview.png
 *.backup.json
 media-private/
 tools/gh/
+recordings/
+avatars-private/
+*-写作草稿.txt
+*-口语.webm
+*-口语.m4a
+英格雷斯-专属伙伴.png
+英格雷斯-名句收藏.json

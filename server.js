@@ -3,7 +3,7 @@ const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const ROOT=__dirname;
 const api=require('./ai-server.js').makeApi();
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.wav':'audio/wav','.svg':'image/svg+xml','.md':'text/plain; charset=utf-8','.txt':'text/plain; charset=utf-8'};
-const top=new Set(['index.html','app.js','core.js','learning.js','features.js','style.css','upgrade.css','features.css','pet-art.js','desktop-pet.html','desktop-pet.js','desktop-pet.css','favicon.svg']);
+const top=new Set(['index.html','app.js','core.js','learning.js','features.js','style.css','upgrade.css','features.css','vocabulary.css','vocabulary.js','vocab-core.js','pet-art.js','desktop-pet.html','desktop-pet.js','desktop-pet.css','favicon.svg']);
 function handler(req,res){
   if(req.url.startsWith('/api/')){api(req,res);return;}
   let pathname;try{pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);}catch{res.writeHead(400).end();return;}

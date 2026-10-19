@@ -10,7 +10,7 @@
 从高考到大学、从考试到真实语境，把词汇积累、间隔复习和听力训练连成日常。
 
 [![Validate Englace](https://github.com/Rose-ZG/englace/actions/workflows/check.yml/badge.svg)](https://github.com/Rose-ZG/englace/actions/workflows/check.yml)
-![Version](https://img.shields.io/badge/version-0.3.0-222728?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.4.0-222728?style=flat-square)
 ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A5%2020-709950?style=flat-square&logo=nodedotjs&logoColor=white)
 ![Local First](https://img.shields.io/badge/storage-local%20first-c8f37b?style=flat-square&labelColor=222728)
 ![Runtime Dependencies](https://img.shields.io/badge/runtime%20dependencies-0-222728?style=flat-square)
@@ -23,6 +23,20 @@
 
 ## 项目概览
 
+### v0.4 词汇训练工作台
+
+| 模式 | 实用功能 |
+| :--- | :--- |
+| 词汇树 / 知识图谱 / 关系网 | 24 个精选词族；节点可点击、键盘选择；标注词形、派生、近反义及主题关系，区别本区词汇与拓展词 |
+| 拼写提取 / 词义配对 | 10 词主动拼写、5 词配对；答错加入当前考试分区的间隔复习 |
+| 词境跃迁 | 原创横向避障跳跃，随时间加速，支持方向键、A/D、空格与触屏按钮 |
+| 穿隙飞行 | 原创窄隙飞行，空格或点击振翅，难度逐渐提高 |
+| 学习复活 | 失败后先学习、再正确拼写最多 5 个本区词才能接续分数；优先到期复习；允许随时退出或清零重开 |
+
+游戏支持暂停、失焦暂停、分区最佳分数和可关闭的合成音效。图谱使用 SVG、游戏使用 Canvas 与 `requestAnimationFrame`，无需新增运行时依赖或网络请求。词汇训练已移除听力卡片，听力功能在侧栏独立保留。
+
+关系图是人工编排的教学关系，尚非全词库自动语义图。游戏最佳分数以考试方向和游戏类型分别存储于本机浏览器，不包含在学习/工作室备份内；学习复活产生的单词掌握及复习记录包含在学习备份内。
+
 英格雷斯将不同考试方向划分为独立学习区，围绕「学词 → 复习 → 听力 → 反馈」构建轻量学习流程。无需注册账号，学习进度保存在当前电脑的浏览器中；应用通过本地服务运行，核心学习流程不调用云端 AI 服务。
 
 界面沿用黑白双主题，以留白、细线、低饱和绿和克制的动效建立视觉层次。README 顶部直接引用网站使用的 [`favicon.svg`](./favicon.svg)，保持品牌一致。
@@ -31,7 +45,7 @@
 | :---: | :---: | :---: | :---: |
 | 各区进度独立 | 词包按需加载 | 本地合成音频 | 作答后即时解析 |
 
-> 当前版本为 **v0.3.0 MVP**，适合体验与迭代验证。内置训练不等同于完整官方题库、正式模考或专业测评。
+> 当前版本为 **v0.4.0 MVP**，适合体验与迭代验证。内置训练不等同于完整官方题库、正式模考或专业测评。
 
 ### v0.3 · 从记忆，走向表达
 
@@ -375,7 +389,7 @@ pwsh -File scripts/build_audio.ps1
 
 | 版本 | 内容 |
 | :--- | :--- |
-| [`v0.3.0`](https://github.com/Rose-ZG/englace/tree/v0.3.0) | 写作口语、打卡名句、在线影视、专属悬浮伙伴与可选 LLM / 图像接口 |
+| [`v0.4.0`](https://github.com/Rose-ZG/englace/tree/v0.4.0) | 写作口语、打卡名句、在线影视、专属悬浮伙伴与可选 LLM / 图像接口 |
 | [`v0.2.0`](https://github.com/Rose-ZG/englace/tree/v0.2.0) | 分级词库、间隔复习、分级听力、本地影视精听与答题反馈 |
 | [`v0.1.0`](https://github.com/Rose-ZG/englace/tree/v0.1.0) | 初始 MVP、黑白主题、12 个示例词、基础练习与 DIY 伙伴 |
 

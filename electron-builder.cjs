@@ -8,7 +8,7 @@ module.exports={
  files:packagedFiles,
  ...(fs.existsSync(path.join(localRuntime,'electron.exe'))?{electronDist:localRuntime}:{}),
  win:{icon:'build/icon.ico',target:[{target:'nsis',arch:['x64']},{target:'portable',arch:['x64']}]},
- nsis:{artifactName:'Englace-${version}-${arch}-setup.exe',oneClick:true,perMachine:false,allowElevation:false,createDesktopShortcut:true,createStartMenuShortcut:true,shortcutName:'英格雷斯',deleteAppDataOnUninstall:false,runAfterFinish:true,installerLanguages:['zh_CN','en_US'],displayLanguageSelector:false,packElevateHelper:false},
+ nsis:{artifactName:'Englace-${version}-${arch}-setup.exe',oneClick:false,allowToChangeInstallationDirectory:true,perMachine:false,allowElevation:false,createDesktopShortcut:true,createStartMenuShortcut:true,shortcutName:'英格雷斯',deleteAppDataOnUninstall:false,runAfterFinish:true,installerLanguages:['zh_CN','en_US'],displayLanguageSelector:false,packElevateHelper:false},
  portable:{artifactName:'Englace-${version}-${arch}-portable.exe',requestExecutionLevel:'user'},
  publish:null
 };

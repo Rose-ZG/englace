@@ -10,7 +10,7 @@
 从高考到大学、从考试到真实语境，把词汇积累、间隔复习和听力训练连成日常。
 
 [![Validate Englace](https://github.com/Rose-ZG/englace/actions/workflows/check.yml/badge.svg)](https://github.com/Rose-ZG/englace/actions/workflows/check.yml)
-![Version](https://img.shields.io/badge/version-0.4.0-222728?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.5.0-222728?style=flat-square)
 ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A5%2020-709950?style=flat-square&logo=nodedotjs&logoColor=white)
 ![Local First](https://img.shields.io/badge/storage-local%20first-c8f37b?style=flat-square&labelColor=222728)
 ![Runtime Dependencies](https://img.shields.io/badge/runtime%20dependencies-0-222728?style=flat-square)
@@ -22,6 +22,16 @@
 ---
 
 ## 项目概览
+
+### v0.5 · 词汇宇宙与记忆游乐场
+
+**拼写答案可查看**：不确定时查看正确单词、音标、完整释义，再遮住答案重新回忆；查看行为会将该词加入复习。
+
+**一个入口，四种视角**：「词汇宇宙」合并原有关系网、知识图谱与词汇树，可在下拉列表切换思维导图、树状、链表、星环关系网。支持搜索 48 个词族及 12 个主题词群，包含 312 个节点词条（不是 312 个独立去重单词）；布局改变不改变词义关系，链表虚线仅表示浏览顺序。
+
+**四款原创小游戏**：词境跃迁、穿隙飞行、流星漫游、棱镜弹球。新增暮色山谷与极光云海原创矢量背景；跳跃采用固定步长物理、平滑加减速、输入缓冲与离地宽限。速度逐步提升，障碍分阶段解锁。游戏失败后仍需完成本区单词学习与回忆才能接续分数。
+
+**可控的声音**：BGM 在本机通过 Web Audio 实时合成，无网络音频下载，默认关闭。支持独立开关、音量、全局静音和暂停自动停止。音乐开关与音量只保存在当前浏览器，不纳入学习备份。
 
 ### v0.4 词汇训练工作台
 
@@ -45,7 +55,7 @@
 | :---: | :---: | :---: | :---: |
 | 各区进度独立 | 词包按需加载 | 本地合成音频 | 作答后即时解析 |
 
-> 当前版本为 **v0.4.0 MVP**，适合体验与迭代验证。内置训练不等同于完整官方题库、正式模考或专业测评。
+> 当前版本为 **v0.5.0 MVP**，适合体验与迭代验证。内置训练不等同于完整官方题库、正式模考或专业测评。
 
 ### v0.3 · 从记忆，走向表达
 

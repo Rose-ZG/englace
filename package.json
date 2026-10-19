@@ -1,0 +1,1 @@
+{"name":"englace","version":"0.2.0","private":true,"description":"Local-first English learning with isolated exam tracks and listening practice","scripts":{"start":"node server.js","test":"node --test tests/*.test.js","check":"node --check app.js && node --check core.js && node --check server.js"},"engines":{"node":">=20"}}

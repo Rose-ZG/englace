@@ -1,0 +1,38 @@
+{
+  "source": "https://github.com/skywind3000/ECDICT",
+  "license": "MIT (upstream declaration)",
+  "sourceFileSha256": "1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf",
+  "built": "2026-10-19",
+  "packs": {
+    "gaokao": {
+      "count": 3674,
+      "tag": "gk",
+      "bytes": 1370880
+    },
+    "cet4": {
+      "count": 3846,
+      "tag": "cet4",
+      "bytes": 1398268
+    },
+    "cet6": {
+      "count": 5406,
+      "tag": "cet6",
+      "bytes": 1900340
+    },
+    "ielts": {
+      "count": 5040,
+      "tag": "ielts",
+      "bytes": 1852874
+    },
+    "toefl": {
+      "count": 6974,
+      "tag": "toefl",
+      "bytes": 2283895
+    },
+    "postgrad": {
+      "count": 4801,
+      "tag": "ky",
+      "bytes": 1722670
+    }
+  }
+}

@@ -1,0 +1,12 @@
+node_modules/
+.cache/
+.env
+.env.*
+*.log
+coverage/
+test-results/
+playwright-report/
+preview.png
+*.backup.json
+media-private/
+tools/gh/

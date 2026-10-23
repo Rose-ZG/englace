@@ -1,0 +1,20 @@
+name: Account Backend Check
+on:
+  workflow_dispatch:
+  push:
+    paths: ['supabase/**', 'account*.js', 'community/accounts.sql', 'tests/account.test.js']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno check supabase/functions/englace-account/index.ts
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/account.test.js

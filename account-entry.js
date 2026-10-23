@@ -1,0 +1,2 @@
+'use strict';
+(()=>{const link=document.createElement('a');link.href='account.html';link.className='secondary account-entry';link.style.cssText='font-size:11px;min-height:40px;display:inline-flex;align-items:center;padding:8px 12px;margin-left:8px';function sync(){let id='';try{id=localStorage.getItem('englace-account-id')||'';}catch{}link.textContent=id?'账号 · '+id:'登录 / 注册';}sync();document.querySelector('main header>div')?.append(link);addEventListener('pageshow',sync);})();

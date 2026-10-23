@@ -2,6 +2,7 @@
 const fs=require('node:fs'),path=require('node:path');const root=path.resolve(__dirname,'..'),out=path.join(root,'.cache/pages-site/app');fs.mkdirSync(out,{recursive:true});const files=[];
 function copy(name){const dest=path.join(out,name);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(path.join(root,name),dest);files.push(name);}
 for(const name of require('../desktop/resources.cjs').publicFiles)if(!name.startsWith('download')&&!name.startsWith('desktop-pet'))copy(name);
+const experience=path.join(out,'experience.js');fs.writeFileSync(experience,fs.readFileSync(experience,'utf8').replace('href="download.html"','href="../download.html"'));
 for(const dir of ['data','audio','assets'])for(const name of fs.readdirSync(path.join(root,dir)))if(/\.(json|txt|wav|svg|png)$/.test(name))copy(dir+'/'+name);
 for(const name of ['LICENSE','mobile.css','pwa.js','pwa.css'])copy(name);
 const manifest={id:'./',name:'英格雷斯 · 英语学习',short_name:'英格雷斯',lang:'zh-CN',start_url:'./',scope:'./',display:'standalone',background_color:'#f4f5f1',theme_color:'#243a31',icons:[{src:'assets/app-icon.png',sizes:'256x256',type:'image/png',purpose:'any'}]};fs.writeFileSync(path.join(out,'manifest.webmanifest'),JSON.stringify(manifest,null,2));files.push('manifest.webmanifest');

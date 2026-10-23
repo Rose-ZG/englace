@@ -1,6 +1,6 @@
 {
   "built": "2026-10-19",
-  "count": 1085,
+  "count": 1105,
   "sonnets": 154,
   "dramaticExcerpts": 8,
   "art": "Original project SVG illustrations, not film stills",
@@ -8,5 +8,8 @@
     "sonnets": "4a3a5466591e30ca93b2c19daeb24770bb08833b57b1616c972b97246e23580f",
     "hamlet": "31584c19795779431b5933499a45b9cecb03e8c246b6ea7e245a2b6d65e8e784",
     "romeo": "5a2037a19e60cccb67b3f5fc93a12cb65c58694ce6a1dc61d0d67d0d2502b3b4"
-  }
+  },
+  "bilingualCount": 68,
+  "curatedOpeningExcerpts": 20,
+  "translation": "Original project Chinese paraphrases, not published translations"
 }

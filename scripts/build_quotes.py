@@ -33,6 +33,12 @@ for filename,work,book,excerpts in plays:
     for quote,translation in excerpts:
         if normalize(quote) not in normalize(raw): continue
         quotes.append({'id':filename+'-'+str(len(quotes)),'text':quote,'translation':translation,'author':'William Shakespeare','work':work,'source':'https://www.gutenberg.org/ebooks/'+book,'scene':['dawn','forest','ocean','night','garden','library'][len(quotes)%6],'note':'公版原作台词 · 中文为本项目学习意译 · 意境插画非剧照'})
+overlay=json.loads(Path('data/quote-bilingual.json').read_text(encoding='utf-8'))
+for entry in quotes:
+    if entry['id'] in overlay['translations']:
+        entry['translation']=overlay['translations'][entry['id']]
+        entry['translationNote']='项目原创中文意译，辅助理解，非出版译本'
+quotes.extend(overlay['additional'])
 Path('data/quotes.json').write_text(json.dumps(quotes,ensure_ascii=False,indent=2),encoding='utf-8')
-Path('data/quotes-manifest.json').write_text(json.dumps({'built':'2026-10-19','count':len(quotes),'sonnets':sonnet_count,'dramaticExcerpts':len([q for q in quotes if not q['id'].startswith('sonnet-')]),'art':'Original project SVG illustrations, not film stills','sources':{name:hashlib.sha256(Path('.cache/'+name+'.txt').read_bytes()).hexdigest() for name in ['sonnets','hamlet','romeo']}},indent=2),encoding='utf-8')
+Path('data/quotes-manifest.json').write_text(json.dumps({'built':'2026-10-19','count':len(quotes),'bilingualCount':len([q for q in quotes if q.get('translation','').strip()]),'sonnets':sonnet_count,'dramaticExcerpts':len([q for q in quotes if not q['id'].startswith('sonnet-')]),'art':'Original project SVG illustrations, not film stills','sources':{name:hashlib.sha256(Path('.cache/'+name+'.txt').read_bytes()).hexdigest() for name in ['sonnets','hamlet','romeo']}},indent=2),encoding='utf-8')
 print(str(len(quotes))+' attributed public-domain excerpts generated (154 sonnets in line-pairs plus verified dramatic lines).')

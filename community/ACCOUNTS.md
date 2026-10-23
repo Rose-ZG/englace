@@ -4,7 +4,7 @@
 
 账号页面：`https://rose-zg.github.io/englace/app/account.html`。
 
-已完成登录、注册和找回密码页面，输入校验、匿名社区身份切换提示及服务端代码。**必须部署以下数据库迁移及 Edge Function 后才能真正使用**。前端会检查健康接口，未就绪时禁用提交；没有用本机伪密码或假成功代替认证。
+已完成账号后端部署，并通过云端实际集成测试：注册、重复 ID 拒绝、大小写 ID 登录、社区权限、三题中任一错误拒绝找回、全对重设、旧密码失效、新密码登录。测试记录：https://github.com/Rose-ZG/englace/actions/runs/39919622595 。前端会检查健康接口，服务不可达时禁用提交。以下部署步骤保留供维护使用。
 
 ## Supabase 部署（已有项目）
 
@@ -28,4 +28,4 @@
 
 ## 验证
 
-Node 单元测试覆盖输入边界；GitHub Actions `Account Backend Check` 执行 Deno 类型检查。数据库及 Edge Function 尚未部署时，不能声称登录、注册、找回已完成集成验证。
+Node 单元测试覆盖输入边界；GitHub Actions `Account Backend Check` 执行 Deno 类型检查。数据库及 Edge Function 已部署并通过上述真实集成测试；浏览器及不同设备仍需持续验证。

@@ -18,3 +18,7 @@ avatars-private/
 *-口语.m4a
 英格雷斯-专属伙伴.png
 英格雷斯-名句收藏.json
+
+ios/Englace/Web/
+ios/build/
+ios/*.xcodeproj/

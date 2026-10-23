@@ -1,0 +1,35 @@
+name: Englace
+options:
+  deploymentTarget:
+    iOS: '16.0'
+targets:
+  Englace:
+    type: application
+    platform: iOS
+    sources:
+      - path: Englace
+        excludes: [Web]
+      - path: Englace/Web
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rosezg.englace.ios
+        PRODUCT_NAME: Englace
+        MARKETING_VERSION: 0.8.0
+        CURRENT_PROJECT_VERSION: 1
+        TARGETED_DEVICE_FAMILY: '1,2'
+        SWIFT_VERSION: '5.0'
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: 英格雷斯
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: 用于主动开启的口语练习，录音不会自动上传。
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: 'UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight'
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: 'UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight'
+        CODE_SIGN_STYLE: Automatic
+schemes:
+  Englace:
+    build:
+      targets:
+        Englace: all

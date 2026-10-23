@@ -10,7 +10,7 @@
 从高考到大学、从考试到真实语境，把词汇积累、间隔复习和听力训练连成日常。
 
 [![Validate Englace](https://github.com/Rose-ZG/englace/actions/workflows/check.yml/badge.svg)](https://github.com/Rose-ZG/englace/actions/workflows/check.yml)
-![Version](https://img.shields.io/badge/version-0.7.2-222728?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.8.0-222728?style=flat-square)
 ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A5%2020-709950?style=flat-square&logo=nodedotjs&logoColor=white)
 ![Local First](https://img.shields.io/badge/storage-local%20first-c8f37b?style=flat-square&labelColor=222728)
 ![Runtime Dependencies](https://img.shields.io/badge/runtime%20dependencies-0-222728?style=flat-square)
@@ -24,11 +24,11 @@
 ## 项目概览
 
 项目代码采用 [MIT 许可证](LICENSE)，第三方内容保留各自许可，详见 [内容来源](docs/SOURCES.md)。
-[Code signing policy](docs/CODE-SIGNING.md)：正在准备免费签名申请，现有 v0.7.2 下载仍未签名。
+[Code signing policy](docs/CODE-SIGNING.md)：正在准备免费签名申请，现有 v0.8.0 下载仍未签名。
 
 ### v0.7 · Windows 桌面应用，下载即用
 
-[**下载便携版（双击启动）**](https://github.com/Rose-ZG/englace/releases/download/v0.7.2/Englace-0.7.2-x64-portable.exe) · [**下载自选目录安装版**](https://github.com/Rose-ZG/englace/releases/download/v0.7.2/Englace-0.7.2-x64-setup.exe) · [校验文件](https://github.com/Rose-ZG/englace/releases/download/v0.7.2/SHA256SUMS.txt)
+[**下载便携版（双击启动）**](https://github.com/Rose-ZG/englace/releases/download/v0.8.0/Englace-0.8.0-x64-portable.exe) · [**下载自选目录安装版**](https://github.com/Rose-ZG/englace/releases/download/v0.8.0/Englace-0.8.0-x64-setup.exe) · [校验文件](https://github.com/Rose-ZG/englace/releases/download/v0.8.0/SHA256SUMS.txt)
 
 适用于 Windows 10/11 64 位，内置 Electron 运行环境、全部词库与本地听力，无需安装 Node.js。安装向导支持自选安装目录并创建桌面与开始菜单快捷方式，完成页可选择启动应用；便携版免安装，首次启动需要解包。新增托盘菜单、窗口恢复与下载新版本入口，沿用网页 Logo 作为应用图标。
 
@@ -78,7 +78,7 @@
 | :---: | :---: | :---: | :---: |
 | 各区进度独立 | 词包按需加载 | 本地合成音频 | 作答后即时解析 |
 
-> 当前版本为 **v0.7.2 MVP**，适合体验与迭代验证。内置训练不等同于完整官方题库、正式模考或专业测评。
+> 当前版本为 **v0.8.0 MVP**，适合体验与迭代验证。内置训练不等同于完整官方题库、正式模考或专业测评。
 
 ### v0.3 · 从记忆，走向表达
 

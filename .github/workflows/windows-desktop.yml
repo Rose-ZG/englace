@@ -35,7 +35,7 @@ jobs:
           $app = Start-Process -FilePath $portable -ArgumentList '--smoke-test', "--smoke-output=$result" -WindowStyle Hidden -PassThru -Wait
           if ($app.ExitCode -ne 0 -or !(Test-Path $result)) { throw 'Packaged smoke test failed' }
           $data = Get-Content $result | ConvertFrom-Json
-          if (!$data.destroyedWindowSafe -or !$data.packaged -or !$data.homeReady -or !$data.petLoaded -or $data.rendererErrors -ne 0) { throw 'Packaged UI did not initialise' }
+          if (!$data.updateBridgeReady -or !$data.updateUIReady -or !$data.destroyedWindowSafe -or !$data.packaged -or !$data.homeReady -or !$data.petLoaded -or $data.rendererErrors -ne 0) { throw 'Packaged UI did not initialise' }
       - uses: actions/upload-artifact@v4
         with:
           name: Englace-Windows-x64

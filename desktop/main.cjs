@@ -1,9 +1,9 @@
 'use strict';
-const {app,BrowserWindow,ipcMain,screen,session,dialog,shell,Menu,Tray,nativeImage}=require('electron');
+const {app,BrowserWindow,ipcMain,screen,session,dialog,shell,Menu,Tray,nativeImage,net}=require('electron');
 const windows=require('./window-state.cjs');
 const http=require('node:http'),path=require('node:path'),fs=require('node:fs');
 const ROOT=path.resolve(__dirname,'..'),smoke=process.argv.includes('--smoke-test');
-let BASE='',mainWindow,petWindow,server,tray,quitting=false;
+let BASE='',mainWindow,petWindow,server,tray,updater,quitting=false;
 const readyFrames=new Set(),smokeFrames=new Map(),rendererErrors=[];
 const smokeOutput=process.argv.find(a=>a.startsWith('--smoke-output='))?.slice('--smoke-output='.length);
 app.setName('Englace');app.setAppUserModelId('com.rosezg.englace');
@@ -46,11 +46,15 @@ if(!app.requestSingleInstanceLock()){app.quit();}else{
   ipcMain.handle('englace:set-pet',(event,visible)=>{if(!trusted(event)||typeof visible!=='boolean')return false;if(!smoke){return windows.setVisible(petWindow,visible);}return true;});
   ipcMain.handle('englace:show-main',event=>{if(trusted(event))showMain();});
   ipcMain.handle('englace:quit',event=>{if(trusted(event))exit();});
+  updater=require('./updater.cjs').createUpdater({version:app.getVersion(),portable:!!process.env.PORTABLE_EXECUTABLE_FILE,folder:path.join(profile,'updates'),fetcher:net.fetch.bind(net),enabled:app.isPackaged&&!smoke,emit:value=>{const contents=windows.contents(mainWindow);if(contents&&!contents.isDestroyed())contents.send('englace:update-state',value);},launch:async(file,portable)=>{if(portable){shell.showItemInFolder(file);return;}await new Promise((resolve,reject)=>{const child=require('node:child_process').spawn(file,[],{detached:true,stdio:'ignore',windowsHide:false});child.once('error',reject);child.once('spawn',()=>{child.unref();resolve();});});},quit:exit});
+  for(const [channel,action] of Object.entries({'status':()=>updater.status(),'check':()=>updater.check(true),'download':()=>updater.download(),'install':()=>updater.install(),'dismiss':()=>updater.dismiss()}))ipcMain.handle('englace:update-'+channel,event=>{if(!trusted(event)||event.sender!==windows.contents(mainWindow))return null;return action();});
+  ipcMain.handle('englace:update-preference',(event,value)=>{if(!trusted(event)||event.sender!==windows.contents(mainWindow)||typeof value!=='boolean')return null;return updater.preference(value);});
+  if(!smoke&&app.isPackaged){setTimeout(()=>updater.check(false),12000).unref();setInterval(()=>updater.check(false),6*60*60*1000).unref();}
   if(!smoke){
    const releaseURL='https://github.com/Rose-ZG/englace/releases/latest';
-   const menu=[{label:'英格雷斯',submenu:[{label:'学习首页',click:showMain},{label:'显示 / 收起桌宠',click:togglePet},{type:'separator'},{label:'下载新版本',click:()=>shell.openExternal(releaseURL)},{label:'关于英格雷斯',click:()=>dialog.showMessageBox(mainWindow,{type:'info',title:'英格雷斯',message:'英格雷斯 · '+app.getVersion(),detail:'无需账号，本机学习。学习数据保存在本机用户档案中；卸载应用默认保留学习档案。'})},{type:'separator'},{label:'退出应用',accelerator:'Alt+F4',click:exit}]},{label:'视图',submenu:[{role:'reload'},{role:'resetZoom'},{role:'zoomIn'},{role:'zoomOut'},{role:'togglefullscreen'}]}];
+   const menu=[{label:'英格雷斯',submenu:[{label:'学习首页',click:showMain},{label:'显示 / 收起桌宠',click:togglePet},{type:'separator'},{label:'检查更新…',click:()=>{showMain();updater.check(true);}},{label:'下载网站',click:()=>shell.openExternal(releaseURL)},{label:'关于英格雷斯',click:()=>dialog.showMessageBox(mainWindow,{type:'info',title:'英格雷斯',message:'英格雷斯 · '+app.getVersion(),detail:'无需账号，本机学习。学习数据保存在本机用户档案中；卸载应用默认保留学习档案。'})},{type:'separator'},{label:'退出应用',accelerator:'Alt+F4',click:exit}]},{label:'视图',submenu:[{role:'reload'},{role:'resetZoom'},{role:'zoomIn'},{role:'zoomOut'},{role:'togglefullscreen'}]}];
    Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
-   tray=new Tray(nativeImage.createFromPath(icon).resize({width:24,height:24}));tray.setToolTip('英格雷斯 · 继续你的英语之旅');tray.setContextMenu(Menu.buildFromTemplate([{label:'打开学习窗口',click:showMain},{label:'显示 / 收起桌宠',click:togglePet},{type:'separator'},{label:'退出英格雷斯',click:exit}]));tray.on('double-click',showMain);
+   tray=new Tray(nativeImage.createFromPath(icon).resize({width:24,height:24}));tray.setToolTip('英格雷斯 · 继续你的英语之旅');tray.setContextMenu(Menu.buildFromTemplate([{label:'打开学习窗口',click:showMain},{label:'显示 / 收起桌宠',click:togglePet},{label:'检查更新…',click:()=>{showMain();updater.check(true);}},{type:'separator'},{label:'退出英格雷斯',click:exit}]));tray.on('double-click',showMain);
   }
   mainWindow.on('close',event=>{if(!quitting&&!smoke){if(windows.visible(petWindow)){event.preventDefault();mainWindow.hide();}else exit();}});
   mainWindow.on('closed',()=>{mainWindow=null;});
@@ -59,12 +63,12 @@ if(!app.requestSingleInstanceLock()){app.quit();}else{
   if(smoke){
    const until=Date.now()+12000;while(smokeFrames.size<2&&Date.now()<until)await new Promise(r=>setTimeout(r,50));
    const main=smokeFrames.get(mainWindow.webContents.id),pet=smokeFrames.get(petWindow.webContents.id);
-   if(!main?.homeReady||!main.directionReady||!pet?.petReady||rendererErrors.length||readyFrames.size!==2)throw Error('A renderer or preload did not initialise.');
+   if(!main?.updateBridgeReady||!main.updateUIReady||!main?.homeReady||!main.directionReady||!pet?.petReady||rendererErrors.length||readyFrames.size!==2)throw Error('A renderer or preload did not initialise.');
    for(const file of ['experience.js','arcade-audio.js','data/cet4.json','assets/app-icon.png']){const response=await fetch(BASE+'/'+file);if(!response.ok)throw Error('Bundled asset missing.');await response.arrayBuffer();}
    const api=await fetch(BASE+'/api/session');if(!api.ok)throw Error('Local API failed.');
    const probe=new BrowserWindow({show:false,webPreferences:prefs});probe.destroy();
    if(windows.show(probe)!==false||windows.toggle(probe)!==false||windows.contents(probe)!==null)throw Error('Destroyed window regression failed.');
-   const result={destroyedWindowSafe:true,packaged:app.isPackaged,version:app.getVersion(),mainLoaded:true,petLoaded:true,homeReady:main.homeReady,directionReady:main.directionReady,mainBridgeReady:true,petBridgeReady:true,apiReady:true,rendererErrors:rendererErrors.length,alwaysOnTop:petWindow.isAlwaysOnTop(),nodeIntegration:false,contextIsolation:true,sandbox:true};
+   const result={updateBridgeReady:main.updateBridgeReady,updateUIReady:main.updateUIReady,destroyedWindowSafe:true,packaged:app.isPackaged,version:app.getVersion(),mainLoaded:true,petLoaded:true,homeReady:main.homeReady,directionReady:main.directionReady,mainBridgeReady:true,petBridgeReady:true,apiReady:true,rendererErrors:rendererErrors.length,alwaysOnTop:petWindow.isAlwaysOnTop(),nodeIntegration:false,contextIsolation:true,sandbox:true};
    const out=smokeOutput?path.resolve(smokeOutput):path.join(profile,'result.json');fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify(result,null,2));console.log('Desktop smoke passed: bundled UI, pet, assets, API and sandbox loaded.');exit();
   }else showMain();
  }).catch(()=>{console.error('Desktop startup failed.');process.exitCode=1;exit();});
